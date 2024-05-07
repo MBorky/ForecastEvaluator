@@ -2,6 +2,10 @@ using ForecastEvaluator.DataModels;
 using ForecastEvaluator.Endpoints;
 using ForecastEvaluator.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Hangfire;
+using Hangfire.SqlServer;
+using ForecastEvaluator.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,8 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.RegisterServices();
 var app = builder.Build();
 app.RegisterMiddlewares();
-//Register Endpoints
-app.MapAnemometerReadingsEndpoints();
+RecurringJob.AddOrUpdate("AnemometerCheck", (IAnemometerService anemometerService) =>
+anemometerService.UpdateAnemometer("ANEMOMETER"), Cron.Hourly);
+RecurringJob.AddOrUpdate("IconUpdate", (IWeatherService weatherService) =>
+weatherService.UpdateForecast("ICON"), "0 10 * * *");
+RecurringJob.AddOrUpdate("FranceUpdate", (IWeatherService weatherService) =>
+weatherService.UpdateForecast("METEO-FRANCE"), "0 10 * * *");
+
 
 app.Run();
-

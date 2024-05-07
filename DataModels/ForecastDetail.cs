@@ -10,9 +10,9 @@ namespace ForecastEvaluator.DataModels
         public int HourID { get; set; }
         public int ForecastID { get; set; }
         public TimeOnly Hour {  get; set; }
-        public decimal WindSpeed { get; set; }
-        public decimal WindGusts { get; set; }
-        public int WindDirection { get; set; }
+        public decimal? WindSpeed { get; set; }
+        public decimal? WindGusts { get; set; }
+        public int? WindDirection { get; set; }
         public WeatherForecast WeatherForecast { get; set; }
     }
 }

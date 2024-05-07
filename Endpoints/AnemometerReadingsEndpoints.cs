@@ -8,14 +8,14 @@ namespace ForecastEvaluator.Endpoints
         public static void MapAnemometerReadingsEndpoints(this IEndpointRouteBuilder routes)
         {
             var anemometer = routes.MapGroup("/anemometer-readings");
-            anemometer.MapGet("/update-anemometer", async (AnemometerService aneomometerService) =>
+            anemometer.MapGet("/update-anemometer", async (IAnemometerService anemometerService) =>
             {
-                var rawData = await aneomometerService.FetchDataAsync("https://www.wiatrkadyny.pl/draga/realtime.txt");
+                /*var rawData = await aneomometerService.FetchAnemometerDataAsync("ANEMOMETER");
                 string[] data = aneomometerService.StringToList(rawData);
-                await aneomometerService.SaveDataAsync(data);
+                await aneomometerService.SaveAnemometerDataAsync(data);*/
+                await anemometerService.UpdateAnemometer("ANEMOMETER");
                 return Results.Ok("Dane anemometru zostały zaktualizowane.");
             });
-            
         }
     }
 }
