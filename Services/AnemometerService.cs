@@ -23,7 +23,8 @@ namespace ForecastEvaluator.Services
             HttpClient client = _httpClient.CreateClient(apiUrlKey);
             var response = await client.GetAsync(""); 
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            var respone = await response.Content.ReadAsStringAsync();
+            return respone;
         }
         public string[] StringToList (string rawData)
         {

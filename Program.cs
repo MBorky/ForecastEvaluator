@@ -20,5 +20,6 @@ weatherService.UpdateForecast("ICON"), "0 10 * * *");
 RecurringJob.AddOrUpdate("FranceUpdate", (IWeatherService weatherService) =>
 weatherService.UpdateForecast("METEO-FRANCE"), "0 10 * * *");
 
-
+// Aplication insights co do logow w app
+// Wzorzec strukturalny circut braker co do zatrzymania odpytywan jak niedostepna baza
 app.Run();
