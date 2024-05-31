@@ -14,11 +14,18 @@ namespace ForecastEvaluator.Services
             _httpClient = httpClient;
             _dbcontext = dbcontext;
         }
+        // Jeden test, który sprawdza czy poprawnie zostały metody wywołane
         public async Task UpdateForecast(string apiUrlKey)
         {
             var rawData = await FetchweatherDataAsync(apiUrlKey);
             await SaveWeatherDataAsync(rawData);
         }
+        // Linijka 1. Sprrawdzam czy api URL key jest poprawny format, czy nie jest NULL, czy jest konkretnym z 2 stringów
+        // Linijka 2. W teście mokuje NULL i jak mój kod się zachowa, jak się zachowa jak przyjdzie zła lub dobra wartość
+        // Linijka 5. Co się wydarzy co przyjdzie ok? Czyli np. podanie określonego pola i czy zapisze się to w zamierzonym miejscu i wratością
+        // Linijka 6. 
+        // Rozważyć wyciągnięcie klientów na zewnątrz do osobnej klasy z interfejsem by użyć DI, wtedy wywalić pierwsze 4 linijki do innej klasy
+        // Ostatnia linijka, czy zwrca odpowiednio wartości
         public async Task<(Hourly,string)>FetchweatherDataAsync(string apiUrlKey)
         {
             HttpClient client = _httpClient.CreateClient(apiUrlKey);
@@ -29,7 +36,11 @@ namespace ForecastEvaluator.Services
             var data = System.Text.Json.JsonSerializer.Deserialize<Root>(jsonString);
             return (data.hourly, apiUrlKey);
         }
-        //saving data forecast for next day
+        // saving data forecast for next day
+        // Walidujemy parametry czyli sprawdzamy co się stanie jak przyjdzie NULL
+        // Sprawdzić czy apiUrlKey nie jest nullem, co tam się dzieje, czy dobrze dane przypisuje np. czy jak przychodzi 15knt to zapisuje 15knt, a nie np kierunek
+        // Co zrobię jak przyszły złe parametry? Czyli potrzebuję w logice validacji
+        // Po zapisie tesetem odczytać bazę i czy jest poprawny record.
         public async Task SaveWeatherDataAsync((Hourly weatherData, string apiUrlKey) data)
         {
             var (weatherData, apiUrlKey) = data;
